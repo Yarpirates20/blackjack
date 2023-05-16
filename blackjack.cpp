@@ -33,26 +33,45 @@ int main()
     int cash = STARTING_CASH;
     showRules();
 
-    while (cash > 0)
-    {
+    // while (cash > 0)
+    // {
         cout << "Money: " << STARTING_CASH << endl;
         getDeck(deck);
 
-        cout << deck.size();
+        // cout << deck.size();
 
+        // Let player make their bet for this round:
         int bet = makeBet();
+
+        // Give player and dealer their cards:
+        vector<string> playerHand;
+        vector<string> dealerHand;
+
+        playerHand.push_back(deck.back());
+        deck.pop_back();
+        playerHand.push_back(deck.back());
+        deck.pop_back();
+
+        dealerHand.push_back(deck.back());
+        deck.pop_back();
+        dealerHand.push_back(deck.back());
+        deck.pop_back();
+
+        // Display player and dealer hands:
+        cout << "Your hand: " << playerHand[0] << " " << playerHand[1] << endl;
+        cout << "Dealer's hand: " << dealerHand[0] << " " << dealerHand[1] << endl;
+
         cout << "Bet: " << bet << endl;
-    }
+    // }
     // cout << "2 " << HEARTS << " J " << SPADES << " A " << CLUBS << " 5 " << DIAMONDS << '\n';
-    // getDeck(deck);
-    // shuffleDeck(deck);
+
     // for (int card = 0; card < deck.size(); card++)
     // {
     //     cout << card + 1 << ": " << deck[card] << endl;
     // }   
 
     // int size = deck.size();
-    // cout << size << endl;
+    // cout << deck.size() << endl;
 
     return 0;
 }
