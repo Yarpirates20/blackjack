@@ -21,7 +21,7 @@ void getDeck(vector<string>&);
 // void shuffleDeck(vector<string>&);
 int makeBet();
 void showRules();
-void displayHands();
+void displayHands(vector<string>, vector<string>, bool);
 int getHandValue();
 char getMove();
 
@@ -58,8 +58,8 @@ int main()
         deck.pop_back();
 
         // Display player and dealer hands:
-        cout << "Your hand: " << playerHand[0] << " " << playerHand[1] << endl;
-        cout << "Dealer's hand: " << dealerHand[0] << " " << dealerHand[1] << endl;
+        displayHands(playerHand, dealerHand, false);
+
 
         cout << "Bet: " << bet << endl;
     // }
@@ -122,4 +122,19 @@ void showRules()
             "\t\tbut must hit exactly one more time before standing. \n"
             "\t\tIn case of a tie, the bet is returned to the player. \n"
             "\t\tThe dealer stops hitting at 17. \n";
+}
+
+// Displays player's and dealer's cards. Hide the dealer's first card if showDealerHand is false.
+void displayHands(vector<string> playerHand, vector<string> dealerHand, bool showDealerHand)
+{
+    if (showDealerHand == false)
+    {
+        cout << "Dealer's hand: " << "** HIDDEN ** " << " " << dealerHand[1] << endl;
+        cout << "Your hand: " << playerHand[0] << " " << playerHand[1] << endl;
+    }
+    else
+    {
+        cout << "Dealer's hand: " << dealerHand[0] << " || " << dealerHand[1] << endl;
+        cout << "Your hand: " << playerHand[0] << " || " << playerHand[1] << endl;
+    }
 }
