@@ -7,7 +7,7 @@
 using namespace std;
 
 const vector<string> RANKS {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-const vector<string> SUITS = {"Spades", "Hearts", "Diamonds", "Clubs"};
+const vector<string> SUITS = {SPADES, HEARTS, DIAMONDS, CLUBS};
 const int STARTING_CASH = 5000;
 
 const string SPADES = "\u2660",
@@ -15,9 +15,8 @@ const string SPADES = "\u2660",
            HEARTS = "\u2665",
            DIAMONDS = "\u2666";
 
-vector<string> deck;
 
-void getDeck(vector<string>&);
+vector<string> getDeck();
 // void shuffleDeck(vector<string>&);
 int makeBet();
 void showRules();
@@ -30,13 +29,14 @@ char getMove();
 
 int main() 
 {
+    vector<string> deck;
     int cash = STARTING_CASH;
     showRules();
 
     // while (cash > 0)
     // {
         cout << "Money: " << STARTING_CASH << endl;
-        getDeck(deck);
+        deck = getDeck();
 
         // cout << deck.size();
 
@@ -76,28 +76,26 @@ int main()
     return 0;
 }
 
-void getDeck(vector<string> &deck)
+vector<string> getDeck()
 {
+    
+    vector<string> deck;
+
     // vector<string> deck;
     for (const auto &suit : SUITS)
     {   
         for (const auto &rank : RANKS)
         {
-            deck.push_back(rank + " of " + suit);
+            deck.push_back(rank + " " + suit);
         }
     }
 
     random_device rd;
     mt19937 rng(rd());
     std::shuffle(deck.begin(), deck.end(), rng);
-}
 
-// void shuffleDeck(vector<string> &deck)
-// {
-//     random_device rd;
-//     mt19937 rng(rd());
-//     std::shuffle(deck.begin(), deck.end(), rng);
-// }
+    return deck;
+}
 
 int makeBet()
 {
@@ -138,3 +136,16 @@ void displayHands(vector<string> playerHand, vector<string> dealerHand, bool sho
         cout << "Your hand: " << playerHand[0] << " || " << playerHand[1] << endl;
     }
 }
+
+// char *card = """
+//  ___ 
+// |2  |
+// |   |
+// |__2|
+  
+// """;
+
+//  ___   ___
+// |## | |2  |
+// |###| | ♥ |
+// |_##| |__2|
