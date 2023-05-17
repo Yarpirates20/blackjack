@@ -7,7 +7,6 @@
 using namespace std;
 
 const vector<string> RANKS {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-const vector<string> SUITS = {SPADES, HEARTS, DIAMONDS, CLUBS};
 const int STARTING_CASH = 5000;
 
 const string SPADES = "\u2660",
@@ -15,17 +14,16 @@ const string SPADES = "\u2660",
            HEARTS = "\u2665",
            DIAMONDS = "\u2666";
 
+const vector<string> SUITS = {SPADES, HEARTS, DIAMONDS, CLUBS};
 
 vector<string> getDeck();
 // void shuffleDeck(vector<string>&);
 int makeBet();
 void showRules();
 void displayHands(vector<string>, vector<string>, bool);
-int getHandValue();
+int getHandValue(vector<string>);
 char getMove();
-
-
-
+void displayCards(vector<string>);
 
 int main() 
 {
@@ -59,6 +57,11 @@ int main()
 
         // Display player and dealer hands:
         displayHands(playerHand, dealerHand, false);
+        
+        int yourValue = getHandValue(playerHand);
+        int dealerValue = getHandValue(dealerHand);
+        cout << "Your points: " << yourValue << endl;
+        cout << "Dealer points: " << yourValue << endl;
 
 
         cout << "Bet: " << bet << endl;
@@ -86,7 +89,7 @@ vector<string> getDeck()
     {   
         for (const auto &rank : RANKS)
         {
-            deck.push_back(rank + " " + suit);
+            deck.push_back(rank + suit);
         }
     }
 
@@ -136,6 +139,41 @@ void displayHands(vector<string> playerHand, vector<string> dealerHand, bool sho
         cout << "Your hand: " << playerHand[0] << " || " << playerHand[1] << endl;
     }
 }
+
+int getHandValue(vector<string> hand)
+{
+    int position = 0;
+    string card = hand[position];
+    int handValue = 0;
+
+    for (auto card : hand)
+    {
+        if (!card.empty())
+        {
+            char rank = card[0];
+
+            if (rank == 'A')
+            {
+                handValue += 11;
+            }
+            else if (rank == 'K' || rank == 'Q' || rank == 'J')
+            {
+                handValue+= 10;
+            }
+            else
+            {
+                handValue += rank - '0';
+            }
+        }
+    }
+
+    return handValue;
+}
+
+// void displayCards(vector<string> card)
+// {
+    
+// }
 
 // char *card = """
 //  ___ 
