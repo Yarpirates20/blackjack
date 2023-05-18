@@ -97,7 +97,7 @@ int main()
                         cout << "\nBet is increased to " << bet << ". \n";
                         cout << "Bet: " << bet << endl; 
                     }
-                    
+
                     string newCard = (deck.back());
                     deck.pop_back();
                     cout << "You drew: " << newCard << endl;
@@ -116,9 +116,61 @@ int main()
                     break;
                 }
             }
+
+        // Dealers actions
+        if (getHandValue(playerHand) <= 21)
+        {
+            while (getHandValue(dealerHand) < 17)
+            {
+                // Dealer hits
+                cout << "Dealer hits...\n";
+                dealerHand.push_back(deck.back());
+                deck.pop_back();
+
+                displayHands(playerHand, dealerHand, false);
+
+                if (getHandValue(dealerHand) > 21)
+                {
+                    break;  // Dealer busts
+                }
+            }
+        }
+
+        // Show final hands:
+        displayHands(playerHand, dealerHand, true);
         
-        // int yourValue = getHandValue(playerHand);
-        // int dealerValue = getHandValue(dealerHand);
+        int playerValue = getHandValue(playerHand);
+        int dealerValue = getHandValue(dealerHand);
+
+        // Lost, won, or tied
+        if (dealerValue > 21)
+        {
+            cout << "Dealer busts! You won " << bet << "!\n";
+            cash += bet;
+        } 
+        else if (playerValue > 21 || playerValue < dealerValue)
+        {
+            cout << "You lost!\n";
+            cash -= bet;
+        }
+        else if (playerValue > dealerValue)
+        {
+            cout << "You won " << bet << "!\n";
+            cash += bet;
+        }
+        else if (playerValue == dealerValue)
+        {
+            cout << "It's a tie, the bet is returned to you.\n";
+        }
+
+        cout << "Would you like to cash out and finish? (Y/N): ";
+        cin >> cashOut;
+
+        if (tolower(cashOut) == 'y')
+        {
+            cout << "Cash: " << cash << endl;
+            cout << "Goodbye!\n";
+        }
         // cout << "Your points: " << yourValue << endl;
         // cout << "Dealer points: " << yourValue << endl;
     }
@@ -213,11 +265,23 @@ void displayHands(vector<string> playerHand, vector<string> dealerHand, bool sho
     }
     else
     {
-        cout << "\nDealer's hand: " << dealerValue  
-             << dealerHand[0] << " || " << dealerHand[1] << endl;
+        cout << "\nDealer's hand: " << dealerValue << endl; 
+        
+        for (auto card : dealerHand)
+        {
+            cout << card << "\t";
+        }
 
-        cout << "\nYour hand: " << yourValue 
-             << playerHand[0] << " || " << playerHand[1] << endl;
+        cout << endl;
+
+        cout << "\nYour hand: " << yourValue << endl;
+        for (auto card : playerHand)
+        {
+            cout << card << "\t";
+        }
+
+        cout << endl;
+            //  << playerHand[0] << "\t" << playerHand[1] << endl;
     }
 }
 
