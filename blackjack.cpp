@@ -257,11 +257,35 @@ void displayHands(vector<string> playerHand, vector<string> dealerHand, bool sho
     
     if (showDealerHand == false)
     {
-        cout << "\nDEALER: ??? " 
-             << "\n** HIDDEN ** " << "\t" << dealerHand[1] << endl;
+        cout << "\nDEALER: ??? \n";
+
+        for (int count = 0; count < dealerHand.size(); count++)
+        {
+            if (count == 0)
+            {
+                cout << "*** HIDDEN ***" << "\t";
+            }
+            else
+            {
+                cout << dealerHand[count] << "\t";
+            }
+        }
+
+        //      << "\n** HIDDEN ** " << "\t" << dealerHand[1] << endl;
         
-        cout << "\nPLAYER: " << yourValue 
-             << "\n" << playerHand[0] << "\t" << playerHand[1] << endl;
+        cout << endl;
+
+        cout << "\nPLAYER: " << yourValue << endl;
+
+        cout << "Your hand: " << yourValue << endl;
+        for (auto card : playerHand)
+        {
+            cout << card << "\t";
+        }
+
+        cout << endl;
+
+            //  << "\n" << playerHand[0] << "\t" << playerHand[1] << endl;
     }
     else
     {
