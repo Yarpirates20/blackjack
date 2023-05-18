@@ -30,15 +30,11 @@ int main()
 {
     vector<string> deck;
     int cash = 5000;
+    char move;
+    int play = 1;
+    char cashOut = 'n';
+
     showRules();
-
-    // while (cash > 0)
-    // {
-        char move;
-        int play = 1;
-        char cashOut = 'n';
-
-        // cout << deck.size();
 
     while ((cash > 0) && (cashOut = tolower('n')))
     {
@@ -65,10 +61,45 @@ int main()
         deck.pop_back();
 
         // Display player and dealer hands:
-        displayHands(playerHand, dealerHand, false);
 
-        move = getMove(playerHand, cash);
-        
+        // Loop until player stands or busts
+        while (getHandValue(playerHand) <= 21 && tolower(move) != 's')
+        { 
+            displayHands(playerHand, dealerHand, false);
+            
+            // Check if player busts
+            if (getHandValue(playerHand) > 21)
+            {
+                cout << "Over 21 -- Player Busts\n";
+                // Break out of current while loop to continue
+                break;
+            }
+            
+            // Get player move -- H, S, or D
+            move = getMove(playerHand, cash - bet);
+
+            switch (tolower(move))
+            {
+            case 'D':
+                /* code */
+                break;
+
+            case 'H':
+                /* code */
+                break;
+            
+            case 'S':
+                /* code */
+                break;
+                
+            default:
+                break;
+            }
+        }
+
+
+
+
         // int yourValue = getHandValue(playerHand);
         // int dealerValue = getHandValue(dealerHand);
         // cout << "Your points: " << yourValue << endl;
@@ -111,24 +142,23 @@ vector<string> getDeck()
     return deck;
 }
 
-int makeBet(int cash)
+int makeBet(int maxBet)
 {
     int playerBet;
-    cout << "How much do you bet? (1-5000): ";
+    cout << "How much do you bet? (1- " << maxBet << "): ";
     cin >> playerBet;
 
-    while (playerBet > cash)
+    while (playerBet > maxBet)
     {
         cout << "Cannot bet more cash than you have!\n"
-                "How much do you bet?(1-5000): ";
+                "Enter bet: ";
                 cin >> playerBet;
     }
 
-    while (playerBet > 5000)
+    while (playerBet < 1)
     {
-        cout << "Maximum bet is 5000. \n"
-                "How much do you bet?(1-5000): ";
-                cin >> playerBet;
+        cout << "Must bet a minimum of 1. \n";
+        cout << "Enter bet: ";
     }
 
     return playerBet;
@@ -158,18 +188,18 @@ void displayHands(vector<string> playerHand, vector<string> dealerHand, bool sho
     
     if (showDealerHand == false)
     {
-        cout << "DEALER: ??? " 
+        cout << "\nDEALER: ??? " 
              << "\n** HIDDEN ** " << "\t" << dealerHand[1] << endl;
         
-        cout << "PLAYER: " << yourValue 
+        cout << "\nPLAYER: " << yourValue 
              << "\n" << playerHand[0] << "\t" << playerHand[1] << endl;
     }
     else
     {
-        cout << "Dealer's hand: " << dealerValue  
+        cout << "\nDealer's hand: " << dealerValue  
              << dealerHand[0] << " || " << dealerHand[1] << endl;
 
-        cout << "Your hand: " << yourValue 
+        cout << "\nYour hand: " << yourValue 
              << playerHand[0] << " || " << playerHand[1] << endl;
     }
 }
@@ -188,13 +218,13 @@ int getHandValue(vector<string> hand)
 
             if (rank == 'A')
             {
-                if (handValue > 10)
+                if (handValue + 10 <= 21)
                 {
-                    handValue += 1;
+                    handValue += 10;
                 }
                 else 
                 {
-                    handValue += 11;
+                    handValue += 1;
                 }
             }
             else if (rank == 'K' || rank == 'Q' || rank == 'J')
@@ -217,26 +247,26 @@ char getMove(vector<string> playerHand, int cash)
 
     if (playerHand.size() == 2 && cash > 0)
     {
-        cout << "(H)it, (S)tand, or (D)ouble Down: ";
+        cout << "\n(H)it, (S)tand, or (D)ouble Down: ";
         cin >> playerMove;
 
         while (tolower(playerMove) != 'h' && 
                tolower(playerMove) != 's' && 
                tolower(playerMove) != 'd'  )
         {
-            cout << "Invalid entry. (H)it, (S)tand, or (D)ouble Down: ";
+            cout << "\nInvalid entry. (H)it, (S)tand, or (D)ouble Down: ";
             cin >> playerMove;
         }
     }
     else if (playerHand.size() > 2)
     {
-        cout << "(H)it or (S)tand: ";
+        cout << "\n(H)it or (S)tand: ";
         cin >> playerMove;
                 
         while (tolower(playerMove) != 'h' && 
                tolower(playerMove) != 's'  )
         {
-            cout << "Invalid entry. (H)it or (S)tand:";
+            cout << "\nInvalid entry. (H)it or (S)tand:";
             cin >> playerMove;
         }
     }
