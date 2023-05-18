@@ -78,28 +78,45 @@ int main()
             // Get player move -- H, S, or D
             move = getMove(playerHand, cash - bet);
 
-            switch (tolower(move))
-            {
-            case 'D':
-                /* code */
-                break;
+            if (tolower(move) == 'd')
+                {
+                    // Player can increase bet if doubling down
+                    int additionalBet = makeBet(std::min(bet, (cash - bet)));
+                    bet += additionalBet;
+                    cout << "\nBet is increased to " << bet << ". \n";
+                    cout << "Bet: " << bet << endl; 
+                }
 
-            case 'H':
-                /* code */
-                break;
-            
-            case 'S':
-                /* code */
-                break;
-                
-            default:
-                break;
+            if (tolower(move) == 'h' || tolower(move) == 'd')
+                {
+                    if (tolower(move) == 'd')
+                    {
+                        // Player can increase bet if doubling down
+                        int additionalBet = makeBet(std::min(bet, (cash - bet)));
+                        bet += additionalBet;
+                        cout << "\nBet is increased to " << bet << ". \n";
+                        cout << "Bet: " << bet << endl; 
+                    }
+                    
+                    string newCard = (deck.back());
+                    deck.pop_back();
+                    cout << "You drew: " << newCard << endl;
+                    playerHand.push_back(newCard);
+
+                    if (getHandValue(playerHand) > 21)
+                    {
+                        cout << "Over 21 -- Player Busts\n";
+                        // Break out of current while loop to continue
+                        break;
+                    }
+                }
+
+            if (tolower(move) == 's')
+                {
+                    break;
+                }
             }
-        }
-
-
-
-
+        
         // int yourValue = getHandValue(playerHand);
         // int dealerValue = getHandValue(dealerHand);
         // cout << "Your points: " << yourValue << endl;
@@ -145,7 +162,7 @@ vector<string> getDeck()
 int makeBet(int maxBet)
 {
     int playerBet;
-    cout << "How much do you bet? (1- " << maxBet << "): ";
+    cout << "How much do you bet? (1-" << maxBet << "): ";
     cin >> playerBet;
 
     while (playerBet > maxBet)
