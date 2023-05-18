@@ -7,7 +7,8 @@
 using namespace std;
 
 const vector<string> RANKS {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-const int STARTING_CASH = 5000;
+
+// const int STARTING_CASH = 5000;
 
 const string SPADES = "\u2660",
            CLUBS = "\u2663",
@@ -18,33 +19,41 @@ const vector<string> SUITS = {SPADES, HEARTS, DIAMONDS, CLUBS};
 
 vector<string> getDeck();
 // void shuffleDeck(vector<string>&);
-int makeBet();
+int makeBet(int);
 void showRules();
 void displayHands(vector<string>, vector<string>, bool);
 int getHandValue(vector<string>);
-char getMove();
+char getMove(vector<string>, int);
 void displayCards(vector<string>);
 
 int main() 
 {
     vector<string> deck;
-    int cash = STARTING_CASH;
+    int cash = 5000;
     showRules();
 
     // while (cash > 0)
     // {
-        cout << "Money: " << STARTING_CASH << endl;
-        deck = getDeck();
+        char move;
+        int play = 1;
+        char cashOut = 'n';
 
         // cout << deck.size();
 
+    while ((cash > 0) && (cashOut = tolower('n')))
+    {
         // Let player make their bet for this round:
-        int bet = makeBet();
-
+        cout << "Money: " << cash << endl;
+        int bet = makeBet(cash);
+        cout << "Bet: " << bet << endl;
+        
+        deck = getDeck();
+        
         // Give player and dealer their cards:
         vector<string> playerHand;
         vector<string> dealerHand;
 
+        // Remove the cards in the hand from the deck
         playerHand.push_back(deck.back());
         deck.pop_back();
         playerHand.push_back(deck.back());
@@ -57,14 +66,16 @@ int main()
 
         // Display player and dealer hands:
         displayHands(playerHand, dealerHand, false);
+
+        move = getMove(playerHand, cash);
         
-        int yourValue = getHandValue(playerHand);
-        int dealerValue = getHandValue(dealerHand);
-        cout << "Your points: " << yourValue << endl;
-        cout << "Dealer points: " << yourValue << endl;
+        // int yourValue = getHandValue(playerHand);
+        // int dealerValue = getHandValue(dealerHand);
+        // cout << "Your points: " << yourValue << endl;
+        // cout << "Dealer points: " << yourValue << endl;
+    }
 
 
-        cout << "Bet: " << bet << endl;
     // }
     // cout << "2 " << HEARTS << " J " << SPADES << " A " << CLUBS << " 5 " << DIAMONDS << '\n';
 
@@ -100,11 +111,25 @@ vector<string> getDeck()
     return deck;
 }
 
-int makeBet()
+int makeBet(int cash)
 {
     int playerBet;
     cout << "How much do you bet? (1-5000): ";
     cin >> playerBet;
+
+    while (playerBet > cash)
+    {
+        cout << "Cannot bet more cash than you have!\n"
+                "How much do you bet?(1-5000): ";
+                cin >> playerBet;
+    }
+
+    while (playerBet > 5000)
+    {
+        cout << "Maximum bet is 5000. \n"
+                "How much do you bet?(1-5000): ";
+                cin >> playerBet;
+    }
 
     return playerBet;
 }
@@ -128,15 +153,24 @@ void showRules()
 // Displays player's and dealer's cards. Hide the dealer's first card if showDealerHand is false.
 void displayHands(vector<string> playerHand, vector<string> dealerHand, bool showDealerHand)
 {
+    int yourValue = getHandValue(playerHand);
+    int dealerValue = getHandValue(dealerHand);
+    
     if (showDealerHand == false)
     {
-        cout << "Dealer's hand: " << "** HIDDEN ** " << " " << dealerHand[1] << endl;
-        cout << "Your hand: " << playerHand[0] << " " << playerHand[1] << endl;
+        cout << "DEALER: ??? " 
+             << "\n** HIDDEN ** " << "\t" << dealerHand[1] << endl;
+        
+        cout << "PLAYER: " << yourValue 
+             << "\n" << playerHand[0] << "\t" << playerHand[1] << endl;
     }
     else
     {
-        cout << "Dealer's hand: " << dealerHand[0] << " || " << dealerHand[1] << endl;
-        cout << "Your hand: " << playerHand[0] << " || " << playerHand[1] << endl;
+        cout << "Dealer's hand: " << dealerValue  
+             << dealerHand[0] << " || " << dealerHand[1] << endl;
+
+        cout << "Your hand: " << yourValue 
+             << playerHand[0] << " || " << playerHand[1] << endl;
     }
 }
 
@@ -154,7 +188,14 @@ int getHandValue(vector<string> hand)
 
             if (rank == 'A')
             {
-                handValue += 11;
+                if (handValue > 10)
+                {
+                    handValue += 1;
+                }
+                else 
+                {
+                    handValue += 11;
+                }
             }
             else if (rank == 'K' || rank == 'Q' || rank == 'J')
             {
@@ -168,6 +209,38 @@ int getHandValue(vector<string> hand)
     }
 
     return handValue;
+}
+
+char getMove(vector<string> playerHand, int cash)
+{
+    char playerMove;
+
+    if (playerHand.size() == 2 && cash > 0)
+    {
+        cout << "(H)it, (S)tand, or (D)ouble Down: ";
+        cin >> playerMove;
+
+        while (tolower(playerMove) != 'h' && 
+               tolower(playerMove) != 's' && 
+               tolower(playerMove) != 'd'  )
+        {
+            cout << "Invalid entry. (H)it, (S)tand, or (D)ouble Down: ";
+            cin >> playerMove;
+        }
+    }
+    else if (playerHand.size() > 2)
+    {
+        cout << "(H)it or (S)tand: ";
+        cin >> playerMove;
+                
+        while (tolower(playerMove) != 'h' && 
+               tolower(playerMove) != 's'  )
+        {
+            cout << "Invalid entry. (H)it or (S)tand:";
+            cin >> playerMove;
+        }
+    }
+    return playerMove;
 }
 
 // void displayCards(vector<string> card)
