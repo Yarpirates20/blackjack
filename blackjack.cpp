@@ -31,7 +31,7 @@ int main()
     vector<string> deck;
     int cash = 5000;
     char move;
-    int play = 1;
+    // int play = 1;
     char cashOut = 'n';
 
     showRules();
@@ -70,7 +70,7 @@ int main()
         // cin.ignore();
         // Loop until player stands or busts
         char move = 'a';
-        cin.ignore();
+        
         while (getHandValue(playerHand) <= 21 && tolower(move) != 's')
         { 
             displayHands(playerHand, dealerHand, false);
@@ -214,7 +214,7 @@ vector<string> getDeck()
 int makeBet(int maxBet, int cash)
 {
     int playerBet;
-    cout << "How much do you bet? (1-" << maxBet << "): ";
+    cout << "How much do you bet? (Maximum additional bet: " << maxBet << "): ";
     cin >> playerBet;
 
     while (playerBet > maxBet || playerBet > cash)
@@ -368,7 +368,7 @@ char getMove(vector<string> playerHand, int cash)
             cin >> playerMove;
         }
     }
-    else if (playerHand.size() > 2)
+    else if (playerHand.size() > 2 || cash < 1)
     {
         cout << "\n(H)it or (S)tand: ";
         cin >> playerMove;
